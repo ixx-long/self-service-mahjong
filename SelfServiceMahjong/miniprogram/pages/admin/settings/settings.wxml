@@ -12,7 +12,7 @@
     <view class="list" style="padding:0 20rpx;">
       <view wx:for="{{settings}}" wx:key="_id" class="setting-item flex-between" data-key="{{item.key}}" data-value="{{item.value}}" bindtap="onEdit">
         <view>
-          <text class="text-bold">{{item.key}}</text>
+          <text class="text-bold">{{item.zhName}}</text>
           <text class="text-sm text-light" style="display:block;margin-top:8rpx;">{{item.description || ''}}</text>
         </view>
         <view class="flex" style="align-items:center;">
@@ -28,7 +28,7 @@
 <view wx:if="{{showEdit}}" class="modal-root">
   <view class="modal-mask" bindtap="onCloseEdit"></view>
   <view class="modal-box" catchtap="">
-    <text class="modal-title">编辑 {{editingKey}}</text>
+    <text class="modal-title">编辑 {{editingZhName}}</text>
     <textarea class="edit-textarea" value="{{editingValue}}" bindinput="onValueInput" placeholder="请输入新值（数组/对象用 JSON 格式）" auto-height maxlength="5000"/>
     <view class="modal-btns">
       <button class="btn btn-outline" style="flex:1;" bindtap="onCloseEdit">取消</button>

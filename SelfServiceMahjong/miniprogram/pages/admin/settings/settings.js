@@ -27,8 +27,18 @@ Page({
     }
   },
 
-  /** 为每个设置项生成 displayValue */
+  // 中文名映射
+  zhNameMap: {
+    adminOpenIds: '管理员列表',
+    overTimeRate: '超时罚金倍率',
+    doorCodeSecret: '开门码签名密钥',
+    timeSlots: '预约时段列表',
+    refundRate: '退款比率',
+  },
+
+  /** 为每个设置项生成中文名和显示值 */
   formatSettings(list) {
+    const zhMap = this.zhNameMap;
     return list.map(item => {
       let displayValue;
       const v = item.value;
@@ -36,10 +46,16 @@ Page({
         displayValue = '[' + v.length + '项]';
       } else if (typeof v === 'number') {
         displayValue = String(v);
+      } else if (item.key === 'doorCodeSecret') {
+        displayValue = '***已加密***';
       } else {
-        displayValue = String(v || '').slice(0, 20);
+        displayValue = String(v || '').slice(0, 25);
       }
-      return { ...item, displayValue };
+      return {
+        ...item,
+        zhName: zhMap[item.key] || item.key,
+        displayValue,
+      };
     });
   },
 
@@ -48,6 +64,7 @@ Page({
     this.setData({
       showEdit: true,
       editingKey: key,
+      editingZhName: this.zhNameMap[key] || key,
       editingValue: typeof value === 'object' ? JSON.stringify(value) : String(value),
     });
   },
