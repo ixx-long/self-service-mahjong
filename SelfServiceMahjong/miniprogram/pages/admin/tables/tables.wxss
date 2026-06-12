@@ -1,0 +1,167 @@
+/* 桌位管理 — 暗色专业主题 */
+.page {
+  min-height: 100vh;
+  background: #0F1923;
+  padding-bottom: 120rpx;
+}
+
+/* 管理员身份条 */
+.admin-bar {
+  background: linear-gradient(135deg, #162B3C 0%, #0F1923 100%);
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: center;
+  border-bottom: 2rpx solid rgba(0, 198, 255, 0.15);
+}
+.admin-bar-icon { font-size: 36rpx; margin-right: 16rpx; }
+.admin-bar-title { font-size: 30rpx; font-weight: bold; color: #00C6FF; letter-spacing: 2rpx; }
+
+/* 门店选择器 */
+.picker-bar {
+  background: #1A2736;
+  padding: 24rpx 32rpx;
+  border-bottom: 1rpx solid rgba(255,255,255,0.04);
+}
+.picker-display {
+  padding: 16rpx 24rpx;
+  border: 2rpx solid rgba(0, 198, 255, 0.2);
+  border-radius: 12rpx;
+  color: #00C6FF;
+  font-size: 28rpx;
+  text-align: center;
+}
+
+/* 列表 */
+.list { padding: 0 20rpx; }
+.list-card {
+  background: #1A2736;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin-bottom: 16rpx;
+  border: 1rpx solid rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.list-card .text-bold { color: #E8EDF2; }
+.list-card .text-light { color: #60758A; }
+
+/* 状态指示灯 */
+.status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot.idle { background: #00E676; box-shadow: 0 0 8rpx rgba(0, 230, 118, 0.5); }
+.status-dot.using { background: #FFB800; box-shadow: 0 0 8rpx rgba(255, 184, 0, 0.5); }
+.status-dot.maintenance { background: #FF4757; box-shadow: 0 0 8rpx rgba(255, 71, 87, 0.5); }
+
+/* 按钮 */
+.btn-outline {
+  background: transparent !important;
+  border: 2rpx solid #00C6FF !important;
+  color: #00C6FF !important;
+}
+.btn-danger {
+  background: rgba(255, 71, 87, 0.15) !important;
+  border: 2rpx solid #FF4757 !important;
+  color: #FF4757 !important;
+}
+.btn-sm {
+  height: 52rpx !important;
+  line-height: 52rpx !important;
+  font-size: 24rpx !important;
+  padding: 0 20rpx !important;
+}
+
+/* FAB */
+.fab {
+  position: fixed;
+  bottom: 48rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #00C6FF, #0090FF);
+  color: #0F1923;
+  padding: 20rpx 48rpx;
+  border-radius: 44rpx;
+  font-weight: bold;
+  font-size: 28rpx;
+  box-shadow: 0 6px 24px rgba(0, 198, 255, 0.35);
+  z-index: 50;
+}
+
+/* 弹窗——根层级 */
+.modal-root {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-mask {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+}
+.modal-box {
+  position: relative;
+  z-index: 1;
+  width: 640rpx;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #1A2736;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  border: 1rpx solid rgba(0, 198, 255, 0.15);
+}
+.modal-title {
+  display: block;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #E8EDF2;
+  margin-bottom: 28rpx;
+}
+.modal-btns {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+
+/* 表单 */
+.form-item { margin-bottom: 24rpx; }
+.form-label { color: #60758A; font-size: 26rpx; display: block; margin-bottom: 8rpx; }
+.form-input {
+  height: 72rpx;
+  border: 2rpx solid rgba(255,255,255,0.08);
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #E8EDF2;
+  background: #0F1923;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00C6FF, #0090FF) !important;
+  color: #0F1923 !important;
+  border: none !important;
+  font-weight: bold !important;
+  border-radius: 12rpx !important;
+}
+
+.empty-state { text-align: center; padding: 80rpx 0; color: #40556A; }
+.loading-container { padding-top: 40rpx; }
+.skeleton {
+  background: linear-gradient(90deg, #1A2736 25%, #233044 50%, #1A2736 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 16rpx;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

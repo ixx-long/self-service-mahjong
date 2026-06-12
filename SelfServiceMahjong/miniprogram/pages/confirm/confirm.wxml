@@ -1,0 +1,72 @@
+<!--确认预约：详情 + 支付-->
+<view class="page">
+  <!-- 预约详情卡片 -->
+  <view class="card confirm-card">
+    <view class="confirm-title text-lg text-bold">预约详情</view>
+
+    <view class="divider"></view>
+
+    <view class="info-row flex-between">
+      <text class="text-light">门店</text>
+      <text class="text-bold">{{storeName}}</text>
+    </view>
+
+    <view class="info-row flex-between">
+      <text class="text-light">桌号</text>
+      <text class="text-bold">{{tableNo}}号桌</text>
+    </view>
+
+    <view class="info-row flex-between">
+      <text class="text-light">日期</text>
+      <text class="text-bold">{{dateText}}</text>
+    </view>
+
+    <view class="info-row flex-between">
+      <text class="text-light">时段</text>
+      <text class="text-bold text-primary">{{slot}}</text>
+    </view>
+
+    <view class="info-row flex-between">
+      <text class="text-light">时长</text>
+      <text class="text-bold">{{slotHours}} 小时</text>
+    </view>
+
+    <view class="divider"></view>
+
+    <!-- 费用明细 -->
+    <view class="info-row flex-between">
+      <text class="text-light">单价</text>
+      <text>¥{{hourlyPrice}}/时</text>
+    </view>
+
+    <view class="info-row flex-between">
+      <text class="text-lg text-bold">合计</text>
+      <text class="text-xl text-accent text-bold">¥{{amount}}</text>
+    </view>
+  </view>
+
+  <!-- 使用须知 -->
+  <view class="card notice-card">
+    <text class="text-sm text-bold">使用须知：</text>
+    <text class="text-sm text-light mt-sm">1. 支付成功后请在预约时段内到店</text>
+    <text class="text-sm text-light">2. 到店后使用"开门码"扫码开台</text>
+    <text class="text-sm text-light">3. 超时使用将按 {{hourlyPrice > 0 ? '¥' + (hourlyPrice * 1.5) + '/时' : '1.5倍费率'}} 计费</text>
+    <text class="text-sm text-light">4. 未开台使用可在订单中取消并退款</text>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-bar safe-bottom">
+    <button class="btn btn-outline" style="flex:1;margin-right:16rpx;" bindtap="onBack">
+      返回修改
+    </button>
+    <button
+      class="btn btn-primary"
+      style="flex:2;margin:0;"
+      bindtap="onConfirmPay"
+      loading="{{submitting}}"
+      disabled="{{submitting || payed}}"
+    >
+      {{submitting ? '支付中...' : payed ? '支付成功 ✓' : '确认支付 ¥' + amount}}
+    </button>
+  </view>
+</view>

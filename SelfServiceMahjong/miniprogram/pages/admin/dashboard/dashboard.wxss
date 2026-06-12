@@ -1,0 +1,149 @@
+/* 管理仪表盘 — 暗色专业主题 */
+.page {
+  min-height: 100vh;
+  background: #0F1923;
+  padding-bottom: 40rpx;
+}
+
+/* 管理员身份条 */
+.admin-bar {
+  background: linear-gradient(135deg, #162B3C 0%, #0F1923 100%);
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: center;
+  border-bottom: 2rpx solid rgba(0, 198, 255, 0.15);
+}
+.admin-bar-icon { font-size: 36rpx; margin-right: 16rpx; }
+.admin-bar-title { font-size: 30rpx; font-weight: bold; color: #00C6FF; letter-spacing: 2rpx; }
+
+/* 时段切换 */
+.period-bar {
+  display: flex;
+  background: #1A2736;
+  margin: 24rpx 20rpx;
+  border-radius: 12rpx;
+  padding: 6rpx;
+}
+.period-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 10rpx;
+  font-size: 26rpx;
+  color: #60758A;
+  transition: all 0.2s;
+}
+.period-item.active {
+  background: #00C6FF;
+  color: #0F1923;
+  font-weight: bold;
+}
+
+/* 统计卡片网格 */
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  padding: 0 20rpx;
+}
+.stat-card {
+  width: calc(50% - 8rpx);
+  background: #1A2736;
+  border-radius: 16rpx;
+  padding: 32rpx 28rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4rpx;
+  height: 60%;
+  background: #00C6FF;
+  border-radius: 0 4rpx 4rpx 0;
+  opacity: 0.6;
+}
+.stat-label {
+  display: block;
+  font-size: 24rpx;
+  color: #60758A;
+  margin-bottom: 8rpx;
+}
+.stat-value {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #E8EDF2;
+  font-family: 'SF Mono', 'DIN', monospace;
+}
+.stat-value.text-accent { color: #00C6FF; }
+.stat-value.text-warning { color: #FFB800; }
+.stat-value.text-success { color: #00E676; }
+
+/* 桌位概览卡片 */
+.card {
+  background: #1A2736;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin: 24rpx 20rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.04);
+}
+.card .text-bold { color: #E8EDF2; }
+.card .text-light { color: #60758A; }
+
+/* 快捷入口 */
+.quick-actions {
+  padding: 0 20rpx;
+}
+.quick-actions .text-bold {
+  color: #E8EDF2;
+  display: block;
+  margin-bottom: 20rpx;
+  font-size: 30rpx;
+}
+.action-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.action-item {
+  width: calc(33.33% - 11rpx);
+  background: #1A2736;
+  border-radius: 16rpx;
+  padding: 32rpx 16rpx;
+  text-align: center;
+  border: 1rpx solid rgba(255, 255, 255, 0.04);
+  transition: all 0.15s;
+}
+.action-item:active {
+  background: #233044;
+  border-color: rgba(0, 198, 255, 0.3);
+  transform: scale(0.97);
+}
+.action-icon {
+  font-size: 52rpx;
+  display: block;
+  margin-bottom: 12rpx;
+}
+.action-item .text-sm {
+  color: #98B0C4;
+  font-size: 24rpx;
+}
+
+/* 骨架屏适配 */
+.loading-container {
+  background: #0F1923;
+  min-height: 100vh;
+  padding-top: 40rpx;
+}
+.skeleton {
+  background: linear-gradient(90deg, #1A2736 25%, #233044 50%, #1A2736 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 16rpx;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

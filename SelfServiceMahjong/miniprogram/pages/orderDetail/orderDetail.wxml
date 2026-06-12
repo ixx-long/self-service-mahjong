@@ -1,0 +1,173 @@
+<!--订单详情：含开门码、计时、时间轴-->
+<view class="page">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="skeleton" style="height:200rpx;width:92%;margin:20rpx auto;"></view>
+    <view class="skeleton" style="height:300rpx;width:92%;margin:20rpx auto;"></view>
+  </view>
+
+  <block wx:else>
+    <!-- ===== 状态横幅 ===== -->
+    <view class="status-banner {{order.status}}">
+      <text class="status-title" wx:if="{{order.status === 'pending'}}">待支付</text>
+      <text class="status-title" wx:elif="{{order.status === 'paid'}}">已支付 · 待使用</text>
+      <text class="status-title" wx:elif="{{order.status === 'using'}}">使用中</text>
+      <text class="status-title" wx:elif="{{order.status === 'completed'}}">已完成</text>
+      <text class="status-title" wx:elif="{{order.status === 'cancelled'}}">已取消</text>
+    </view>
+
+    <!-- ===== 预约信息 ===== -->
+    <view class="card info-card">
+      <view class="info-row flex-between">
+        <text class="text-light">门店</text>
+        <text class="text-bold">{{storeName}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="text-light">桌号</text>
+        <text class="text-bold">{{tableNo}}号桌</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="text-light">日期</text>
+        <text>{{order.date}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="text-light">时段</text>
+        <text class="text-primary text-bold">{{order.timeSlot}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="text-light">预付金额</text>
+        <text class="text-accent text-bold">¥{{order.discountAmount}}</text>
+      </view>
+      <view wx:if="{{order.actualAmount}}" class="info-row flex-between">
+        <text class="text-light">实付金额</text>
+        <text class="text-accent text-bold">¥{{order.actualAmount}}</text>
+      </view>
+    </view>
+
+    <!-- ===== 进行中：实时计时 ===== -->
+    <view wx:if="{{order.status === 'using'}}" class="card timer-card">
+      <text class="text-xxl text-accent text-bold">{{elapsedText}}</text>
+      <text class="text-sm text-light mt-sm">预计费用 ¥{{estimatedAmount}}</text>
+    </view>
+
+    <!-- ===== 已支付：开门码 ===== -->
+    <view wx:if="{{order.status === 'paid'}}" class="card door-code-card">
+      <text class="text-lg text-bold" style="text-align:center;display:block;">🔑 开门码</text>
+
+      <!-- 加载中 -->
+      <view wx:if="{{!doorCode && !doorCodeExpired}}" class="qr-placeholder text-center mt-base">
+        <text class="text-xxl">🔄</text>
+        <text class="text-light mt-sm" style="display:block;">正在生成...</text>
+      </view>
+
+      <!-- 已过期 -->
+      <view wx:elif="{{doorCodeExpired}}" class="qr-placeholder text-center mt-base">
+        <text class="text-xxl">⏰</text>
+        <text class="text-light mt-sm" style="display:block;">开门码已过期</text>
+      </view>
+
+      <!-- 开门码展示 -->
+      <view wx:else class="code-display mt-base">
+        <!-- 二维码图片 -->
+        <image wx:if="{{qrcodeImage}}" class="qr-image" src="{{qrcodeImage}}" mode="aspectFit"></image>
+        <!-- 文本码（备用） -->
+        <text class="code-num mt-sm">{{doorCode}}</text>
+        <text class="code-hint mt-sm">请将此二维码或数字码出示给店员</text>
+        <!-- 过期倒计时 -->
+        <view class="expire-timer mt-base">
+          <text class="{{doorCodeExpired ? 'text-danger' : 'text-warning'}}" style="font-size:26rpx;">
+            ⏱ {{doorCodeExpireText}}
+          </text>
+        </view>
+      </view>
+
+      <!-- 重新生成 -->
+      <button
+        class="btn btn-outline btn-sm mt-base"
+        style="margin:0 auto;width:220rpx;"
+        bindtap="generateCode"
+        loading="{{generatingCode}}"
+        disabled="{{generatingCode}}"
+      >
+        {{doorCodeExpired ? '重新生成' : '刷新'}}
+      </button>
+    </view>
+
+    <!-- ===== 时间轴 ===== -->
+    <view class="card timeline-card">
+      <text class="text-bold mb-base" style="display:block;">订单轨迹</text>
+      <view wx:for="{{timeline}}" wx:key="label" class="timeline-item">
+        <view class="timeline-dot {{item.done ? 'done' : ''}}"></view>
+        <view class="timeline-content">
+          <text class="text-sm {{item.done ? 'text-bold' : 'text-light'}}">{{item.label}}</text>
+          <text wx:if="{{item.time}}" class="text-sm text-lighter">{{item.time}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 操作按钮区 ===== -->
+    <view class="action-bar safe-bottom">
+      <!-- 待支付 -->
+      <block wx:if="{{order.status === 'pending'}}">
+        <button class="btn btn-outline" style="flex:1;margin-right:16rpx;" bindtap="onCancel">取消订单</button>
+        <button class="btn btn-primary" style="flex:2;margin:0;" bindtap="onPay">立即支付</button>
+      </block>
+
+      <!-- 已支付 -->
+      <block wx:elif="{{order.status === 'paid'}}">
+        <button class="btn btn-outline" style="flex:1;margin-right:16rpx;" bindtap="onCancel">取消并退款</button>
+        <button class="btn btn-primary" style="flex:2;margin:0;" bindtap="generateCode">查看开门码</button>
+      </block>
+
+      <!-- 进行中 -->
+      <block wx:elif="{{order.status === 'using'}}">
+        <button class="btn btn-danger" style="flex:1;margin:0;" bindtap="onFinish">结束使用</button>
+      </block>
+
+      <!-- 已完成 -->
+      <block wx:elif="{{order.status === 'completed'}}">
+        <button class="btn btn-outline" style="flex:1;margin-right:16rpx;" bindtap="onBack">返回</button>
+        <button class="btn btn-primary" style="flex:2;margin:0;" bindtap="onReview">去评价</button>
+      </block>
+
+      <!-- 已取消 -->
+      <block wx:else>
+        <button class="btn btn-outline" style="flex:1;margin:0;" bindtap="onBack">返回</button>
+      </block>
+    </view>
+  </block>
+
+  <!-- ===== 结算结果弹窗 ===== -->
+  <view wx:if="{{showSettleModal}}" class="modal-mask" bindtap="onCloseSettleModal">
+    <view class="modal-content" catchtap="">
+      <text class="text-xl text-bold" style="text-align:center;display:block;margin-bottom:24rpx;">
+        {{settleResult && settleResult.refund > 0 ? '已退款' : settleResult && settleResult.charge > 0 ? '需补缴' : '结算完成'}}
+      </text>
+
+      <view wx:if="{{settleResult}}" class="settle-detail">
+        <view class="flex-between" style="padding:12rpx 0;">
+          <text class="text-light">使用时长</text>
+          <text>{{settleResult.usedHours}}小时（{{settleResult.usedMinutes}}分钟）</text>
+        </view>
+        <view class="flex-between" style="padding:12rpx 0;">
+          <text class="text-light">正常费用</text>
+          <text>¥{{settleResult.normalAmount}}</text>
+        </view>
+        <view class="flex-between" style="padding:12rpx 0;">
+          <text class="text-light">预付金额</text>
+          <text>¥{{settleResult.prepaid}}</text>
+        </view>
+        <view class="flex-between" style="padding:12rpx 0;" wx:if="{{settleResult.refund > 0}}">
+          <text class="text-bold text-success">退款到余额</text>
+          <text class="text-bold text-success">+¥{{settleResult.refund}}</text>
+        </view>
+        <view class="flex-between" style="padding:12rpx 0;" wx:if="{{settleResult.charge > 0}}">
+          <text class="text-bold text-danger">需补缴</text>
+          <text class="text-bold text-danger">¥{{settleResult.charge}}</text>
+        </view>
+      </view>
+
+      <button class="btn btn-primary mt-lg" bindtap="onCloseSettleModal">知道了</button>
+    </view>
+  </view>
+</view>

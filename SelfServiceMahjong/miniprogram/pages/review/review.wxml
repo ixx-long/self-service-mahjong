@@ -1,0 +1,51 @@
+<!--写评价-->
+<view class="page">
+  <!-- 星级评分 -->
+  <view class="card rating-section">
+    <text class="text-lg text-bold" style="display:block;text-align:center;margin-bottom:24rpx;">给个评价吧</text>
+    <star-rating rating="{{rating}}" bindchange="onRatingChange"></star-rating>
+    <text class="text-sm text-light mt-sm" style="display:block;text-align:center;">
+      {{rating === 0 ? '点击星星评分' : rating + '分'}}
+    </text>
+  </view>
+
+  <!-- 文字评价 -->
+  <view class="card">
+    <textarea
+      class="content-input"
+      value="{{content}}"
+      placeholder="说说你的体验（选填，最多200字）"
+      maxlength="200"
+      bindinput="onContentInput"
+      auto-height
+    ></textarea>
+  </view>
+
+  <!-- 图片上传 -->
+  <view class="card">
+    <text class="text-sm text-bold mb-sm" style="display:block;">上传图片（选填，最多3张）</text>
+    <view class="image-grid">
+      <view wx:for="{{images}}" wx:key="*this" class="image-item">
+        <image src="{{item}}" mode="aspectFill" class="image-preview"></image>
+        <view class="image-remove" data-index="{{index}}" bindtap="onRemoveImage">✕</view>
+      </view>
+      <view wx:if="{{images.length < 3}}" class="image-add" bindtap="onChooseImage">
+        <text class="text-xxl text-lighter">＋</text>
+        <text class="text-sm text-lighter">{{images.length}}/3</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-bar px-base safe-bottom">
+    <button
+      class="btn btn-primary"
+      style="width:100%;"
+      bindtap="onSubmit"
+      loading="{{submitting}}"
+      disabled="{{rating === 0 || submitting}}"
+    >
+      {{uploading ? '图片上传中...' : submitting ? '提交中...' : '提交评价'}}
+    </button>
+  </view>
+</view>

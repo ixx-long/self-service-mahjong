@@ -1,0 +1,81 @@
+<!--门店详情：桌位时段选择-->
+<view class="page">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-container px-base">
+    <view class="skeleton" style="height:280rpx;border-radius:16rpx;margin-bottom:20rpx;"></view>
+    <view class="skeleton" style="height:400rpx;border-radius:16rpx;"></view>
+  </view>
+
+  <!-- 错误 -->
+  <view wx:elif="{{errorMsg}}" class="empty-state">
+    <text class="empty-text">{{errorMsg}}</text>
+  </view>
+
+  <block wx:else>
+    <!-- 门店信息卡片——现代东方奢华 -->
+    <view class="store-hero">
+      <view class="hero-content">
+        <view class="hero-top">
+          <text class="hero-name">{{store.name}}</text>
+          <view wx:if="{{reviewSummary.totalReviews > 0}}" class="rating-badge">
+            <text class="rating-star">★</text>
+            <text class="rating-num">{{reviewSummary.avgRating}}</text>
+            <text class="rating-count">({{reviewSummary.totalReviews}})</text>
+          </view>
+        </view>
+        <text class="hero-address">📍 {{store.address}}</text>
+        <view class="hero-footer">
+          <text class="hero-hours">🕐 {{store.openTime}} - {{store.closeTime}}</text>
+          <text class="hero-phone" bindtap="onCallPhone">📞 电话</text>
+          <text class="hero-nav" bindtap="onNavigate">🧭 导航</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 日期选择器 -->
+    <scroll-view class="date-bar" scroll-x show-scrollbar="{{false}}">
+      <view
+        wx:for="{{dates}}"
+        wx:key="*this"
+        class="date-item {{selectedDate === item ? 'active' : ''}}"
+        data-date="{{item}}"
+        bindtap="onDateChange"
+      >
+        <text class="date-week">{{item.slice(5)}}</text>
+      </view>
+    </scroll-view>
+
+    <!-- 桌位列表（使用组件） -->
+    <view class="table-list">
+      <table-slot-picker
+        wx:for="{{tables}}"
+        wx:key="_id"
+        table="{{item}}"
+        selected-table-id="{{selectedTableId}}"
+        selected-slot="{{selectedSlot}}"
+        bind:select="onSlotSelect"
+      ></table-slot-picker>
+    </view>
+
+    <!-- 空桌位提示 -->
+    <view wx:if="{{tables.length === 0}}" class="empty-state">
+      <text class="empty-icon-text">🀄</text>
+      <text class="empty-text">该门店暂无桌位</text>
+    </view>
+
+    <!-- 底部操作栏 -->
+    <view class="bottom-bar safe-bottom" wx:if="{{tables.length > 0}}">
+      <view class="flex-1 px-base">
+        <text wx:if="{{selectedTableId && selectedSlot}}" class="selected-hint">
+          已选<text class="hint-highlight"> {{selectedSlot}}</text>
+        </text>
+        <text wx:else class="hint-placeholder">请选择桌位和时段</text>
+      </view>
+      <button
+        class="btn-primary-bar {{selectedTableId && selectedSlot ? '' : 'disabled'}}"
+        disabled="{{!selectedTableId || !selectedSlot}}"
+        bindtap="onConfirm"
+      >立即预约</button>
+    </view>
+  </block>
+</view>

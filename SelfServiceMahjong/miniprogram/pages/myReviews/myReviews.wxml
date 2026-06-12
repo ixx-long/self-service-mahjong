@@ -1,0 +1,27 @@
+<!--我的评价-->
+<view class="page">
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="skeleton" style="height:160rpx;width:92%;margin:16rpx auto;" wx:for="{{[1,2,3]}}" wx:key="*this"></view>
+  </view>
+
+  <block wx:elif="{{reviews.length === 0}}">
+    <view class="empty-state">
+      <text class="empty-icon-text">📝</text>
+      <text class="empty-text">暂无评价</text>
+    </view>
+  </block>
+
+  <view wx:else class="list">
+    <view wx:for="{{reviews}}" wx:key="_id" class="review-card">
+      <view class="review-header flex-between">
+        <text class="text-bold">{{item.storeName || '未知门店'}}</text>
+        <star-rating rating="{{item.rating}}" readonly="{{true}}" size="small"></star-rating>
+      </view>
+      <text wx:if="{{item.content}}" class="review-content">{{item.content}}</text>
+      <view wx:if="{{item.images && item.images.length > 0}}" class="review-images">
+        <image wx:for="{{item.images}}" wx:key="*this" wx:for-item="img" src="{{img}}" mode="aspectFill" class="review-img"></image>
+      </view>
+      <text class="review-time">{{item.createTimeText}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,105 @@
+<!--个人中心-->
+<view class="page" wx:if="{{!showTopUpModal && !showEditModal}}">
+  <!-- 用户信息头部 -->
+  <view class="user-header bg-primary">
+    <image
+      wx:if="{{userInfo.avatarUrl}}"
+      class="avatar"
+      src="{{userInfo.avatarUrl}}"
+      mode="aspectFill"
+    ></image>
+    <view wx:else class="avatar avatar-placeholder flex-center">
+      <text class="text-xxl">👤</text>
+    </view>
+    <text class="nickname text-white text-lg text-bold mt-sm">
+      {{userInfo.nickName || '微信用户'}}
+    </text>
+    <view class="role-tag mt-sm" wx:if="{{isAdmin}}">
+      <text class="text-sm text-primary">管理员</text>
+    </view>
+  </view>
+
+  <!-- 余额卡片 -->
+  <view class="card balance-card">
+    <view class="flex-between">
+      <view>
+        <text class="text-sm text-light">我的余额</text>
+        <view class="flex mt-sm">
+          <text class="text-xxl text-accent text-bold">¥{{balance}}</text>
+        </view>
+      </view>
+      <button class="btn btn-sm btn-primary" bindtap="onTopUp">充值</button>
+    </view>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="card menu-card">
+    <view class="menu-item flex-between" bindtap="onOrders">
+      <text>消费记录</text>
+      <text class="text-lighter">→</text>
+    </view>
+    <view class="divider"></view>
+    <view class="menu-item flex-between" bindtap="onMyReviews">
+      <text>我的评价</text>
+      <text class="text-lighter">→</text>
+    </view>
+    <view class="divider"></view>
+    <view class="menu-item flex-between" bindtap="onService">
+      <text>联系客服</text>
+      <text class="text-lighter">→</text>
+    </view>
+    <view class="divider" wx:if="{{isAdmin}}"></view>
+    <view
+      wx:if="{{isAdmin}}"
+      class="menu-item flex-between"
+      bindtap="onAdmin"
+    >
+      <text class="text-accent">🔧 管理端</text>
+      <text class="text-lighter">→</text>
+    </view>
+  </view>
+
+  <!-- 设置 -->
+  <view class="card menu-card">
+    <view class="menu-item flex-between" bindtap="onEditNick">
+      <text class="text-light">修改昵称</text>
+      <text class="text-sm">{{userInfo.nickName || '未设置'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="menu-item flex-between" bindtap="onEditPhone">
+      <text class="text-light">修改手机号</text>
+      <text class="text-sm">{{userInfo.phone || '未设置'}}</text>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-btn mt-lg" bindtap="onLogout">
+    <text class="text-lighter">退出登录</text>
+  </view>
+</view>
+
+<!-- ===== 充值弹窗（根层级） ===== -->
+<view wx:if="{{showTopUpModal}}" class="modal-root">
+  <view class="modal-mask" bindtap="onCloseTopUpModal"></view>
+  <view class="modal-box">
+    <text class="modal-title">模拟充值</text>
+    <input class="modal-input" type="digit" placeholder="请输入充值金额" value="{{topUpAmount}}" bindinput="onTopUpInput" adjust-position="{{true}}"/>
+    <view class="modal-btns">
+      <button class="btn btn-outline" style="flex:1;" bindtap="onCloseTopUpModal">取消</button>
+      <button class="btn btn-primary" style="flex:2;margin:0;" bindtap="onConfirmTopUp">确认充值</button>
+    </view>
+  </view>
+</view>
+
+<!-- ===== 编辑弹窗（根层级） ===== -->
+<view wx:if="{{showEditModal}}" class="modal-root">
+  <view class="modal-mask" bindtap="onCloseEditModal"></view>
+  <view class="modal-box">
+    <text class="modal-title">修改{{editLabel}}</text>
+    <input class="modal-input" type="{{editField === 'phone' ? 'number' : 'text'}}" maxlength="{{editField === 'phone' ? 11 : 20}}" placeholder="请输入{{editLabel}}" value="{{editValue}}" bindinput="onEditInput" adjust-position="{{true}}"/>
+    <view class="modal-btns">
+      <button class="btn btn-outline" style="flex:1;" bindtap="onCloseEditModal">取消</button>
+      <button class="btn btn-primary" style="flex:2;margin:0;" bindtap="onConfirmEdit">保存</button>
+    </view>
+  </view>
+</view>

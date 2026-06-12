@@ -1,0 +1,37 @@
+<!--首页：附近门店列表-->
+<view class="page">
+  <!-- 加载中：骨架屏 -->
+  <view wx:if="{{loading}}" class="loading-container px-base">
+    <view class="skeleton-card" wx:for="{{[1,2,3]}}" wx:key="*this">
+      <view class="skeleton" style="height:200rpx;border-radius:16rpx;"></view>
+    </view>
+  </view>
+
+  <!-- 错误提示 -->
+  <view wx:elif="{{errorMsg}}" class="empty-state">
+    <text class="empty-icon-text">📍</text>
+    <text class="empty-text">{{errorMsg}}</text>
+    <button class="btn btn-outline btn-sm mt-base" bindtap="onRetryLocation">重新加载</button>
+  </view>
+
+  <!-- 空列表 -->
+  <view wx:elif="{{stores.length === 0}}" class="empty-state">
+    <text class="empty-icon-text">🀄</text>
+    <text class="empty-text">附近暂无麻将馆</text>
+    <text class="empty-sub-text">扩大搜索范围或稍后再试</text>
+  </view>
+
+  <!-- 门店列表 -->
+  <view wx:else class="store-list">
+    <view wx:for="{{stores}}" wx:key="_id" class="store-item-wrapper"
+          style="animation-delay:{{index * 60}}ms">
+      <store-card
+        store="{{item}}"
+        distance-text="{{item.distanceText}}"
+        free-count="{{item.freeCount}}"
+        tables-count="{{item.tablesCount}}"
+        bind:tap="onStoreTap"
+      ></store-card>
+    </view>
+  </view>
+</view>

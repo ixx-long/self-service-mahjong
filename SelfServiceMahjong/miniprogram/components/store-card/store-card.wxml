@@ -1,0 +1,35 @@
+<!--门店卡片——现代东方奢华风格-->
+<view class="store-card card" bindtap="onTap">
+  <!-- 顶部：店名 + 距离徽章 -->
+  <view class="card-header">
+    <view class="store-name-wrap">
+      <text class="store-icon">🀄</text>
+      <text class="store-name text-bold text-ellipsis">{{store.name}}</text>
+    </view>
+    <view class="distance-badge">
+      <text class="distance-text">{{distanceText}}</text>
+    </view>
+  </view>
+
+  <!-- 地址 -->
+  <view class="card-body">
+    <text class="address-text text-ellipsis">📍 {{store.address}}</text>
+    <text class="hours-text">🕐 {{store.openTime}} - {{store.closeTime}}</text>
+  </view>
+
+  <!-- 底部：空闲状态 + 进度条 -->
+  <view class="card-footer">
+    <view class="status-row">
+      <view class="status-indicator {{freeCount > 0 ? 'has-free' : 'full'}}">
+        <view class="status-pulse {{freeCount > 0 ? 'pulse-green' : 'pulse-red'}}"></view>
+        <text class="status-label">{{freeCount > 0 ? '空闲 ' + freeCount + '/' + tablesCount + ' 桌' : '已满'}}</text>
+      </view>
+      <text class="arrow-icon">›</text>
+    </view>
+    <!-- 进度条 -->
+    <view class="capacity-bar">
+      <view class="capacity-fill {{freePercent > 50 ? 'high' : freePercent > 0 ? 'low' : 'none'}}"
+            style="width:{{freePercent}}%"></view>
+    </view>
+  </view>
+</view>

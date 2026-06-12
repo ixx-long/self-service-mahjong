@@ -1,0 +1,5 @@
+.star-rating { display: flex; align-items: center; }
+.star-item { padding: 4rpx; }
+.star-full { color: #FFB800; }
+.star-half { color: #FFB800; opacity: 0.6; }
+.star-empty { color: #DDD; }

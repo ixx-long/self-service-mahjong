@@ -1,0 +1,43 @@
+<!--订单管理-->
+<view class="page">
+  <view class="admin-bar">
+    <text class="admin-bar-icon">📋</text>
+    <text class="admin-bar-title">订单管理</text>
+  </view>
+  <!-- 筛选栏 -->
+  <view class="filter-bar bg-white px-base py-base">
+    <picker mode="selector" range="{{stores}}" range-key="name" bindchange="onStoreFilter">
+      <view class="picker-display">{{filterStoreName}}</view>
+    </picker>
+  </view>
+  <scroll-view class="status-filter" scroll-x>
+    <view class="status-item {{filterStatus===''?'active':''}}" data-status="" bindtap="onStatusFilter">全部</view>
+    <view class="status-item {{filterStatus==='pending'?'active':''}}" data-status="pending" bindtap="onStatusFilter">待支付</view>
+    <view class="status-item {{filterStatus==='paid'?'active':''}}" data-status="paid" bindtap="onStatusFilter">已支付</view>
+    <view class="status-item {{filterStatus==='using'?'active':''}}" data-status="using" bindtap="onStatusFilter">进行中</view>
+    <view class="status-item {{filterStatus==='completed'?'active':''}}" data-status="completed" bindtap="onStatusFilter">已完成</view>
+  </scroll-view>
+
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="skeleton" style="height:160rpx;width:92%;margin:12rpx auto;" wx:for="{{[1,2,3]}}" wx:key="*this"></view>
+  </view>
+
+  <block wx:else>
+    <view class="list px-base pt-base">
+      <view wx:for="{{orders}}" wx:key="_id" class="card list-card">
+        <view class="flex-between mb-sm">
+          <text class="text-bold">{{item.date}} {{item.timeSlot}}</text>
+          <view class="status-tag {{item.status}}">{{item.statusText}}</view>
+        </view>
+        <view class="flex-between">
+          <text class="text-sm text-light">{{item.amountText}}</text>
+          <view class="flex" style="gap:12rpx;" wx:if="{{item.status==='paid'||item.status==='using'||item.status==='pending'}}">
+            <button wx:if="{{item.status==='paid'||item.status==='pending'}}" class="btn btn-sm btn-outline" size="mini" data-id="{{item._id}}" bindtap="onRefund">退款</button>
+            <button wx:if="{{item.status==='using'}}" class="btn btn-sm btn-danger" size="mini" data-id="{{item._id}}" bindtap="onForceFinish">强制结束</button>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{orders.length===0}}" class="empty-state"><text>暂无订单</text></view>
+    </view>
+  </block>
+</view>
