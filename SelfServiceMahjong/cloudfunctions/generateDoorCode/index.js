@@ -41,7 +41,15 @@ exports.main = async (event, context) => {
       return { code: -2, data: null, msg: statusMap[order.status] || '订单状态不允许生成开门码' };
     }
 
-    // 2. 获取签名密钥
+    // 2. 检查预约时段是否已过期
+    if (order.date && order.timeSlot) {
+      const slotEnd = getSlotEndTime(order.date, order.timeSlot);
+      if (Date.now() > slotEnd.getTime()) {
+        return { code: -3, data: null, msg: `预约时段已过期（${order.date} ${order.timeSlot}）` };
+      }
+    }
+
+    // 3. 获取签名密钥
     const secretRes = await db.collection('settings')
       .where({ key: 'doorCodeSecret' })
       .get();
@@ -94,3 +102,11 @@ exports.main = async (event, context) => {
     return { code: -1, data: null, msg: err.message || '生成开门码失败' };
   }
 };
+
+/** 获取时段结束时间 */
+function getSlotEndTime(dateStr, slot) {
+  const parts = slot.split('-');
+  if (parts.length !== 2) return new Date(dateStr + 'T23:59:59');
+  const endTime = parts[1]; // "18:00"
+  return new Date(`${dateStr}T${endTime}:00`);
+}

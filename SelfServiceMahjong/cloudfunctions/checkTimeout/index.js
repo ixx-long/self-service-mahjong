@@ -17,19 +17,63 @@ exports.main = async (event, context) => {
   let processed = 0;
 
   try {
-    // 1. 查询所有"进行中"的订单
+    const now = new Date();
+
+    // ========================================
+    // 1. 处理已支付但时段已过期的订单（用户没来）
+    // ========================================
+    const paidOrders = await db.collection('orders')
+      .where({ status: 'paid' })
+      .get();
+
+    for (const order of (paidOrders.data || [])) {
+      try {
+        if (!order.date || !order.timeSlot) continue;
+        const slotEnd = parseSlotEnd(order.timeSlot, order.date);
+        if (now > slotEnd) {
+          // 时段已过，自动取消并退款
+          console.log(`订单 ${order._id} 预约时段已过，自动取消退款`);
+          await db.collection('orders').doc(order._id).update({
+            data: { status: 'cancelled', endTime: now },
+          });
+          // 退款
+          if (order.discountAmount > 0) {
+            const userRes = await db.collection('users').where({ _openid: order._openid || order.userId }).get();
+            if (userRes.data && userRes.data.length > 0) {
+              await db.collection('users').doc(userRes.data[0]._id).update({
+                data: { balance: _.inc(order.discountAmount) },
+              });
+            }
+          }
+          // 释放时段
+          try {
+            const slots = await db.collection('time_slots')
+              .where({ orderId: order._id }).get();
+            if (slots.data && slots.data.length > 0) {
+              await db.collection('time_slots').doc(slots.data[0]._id).update({
+                data: { status: 'free', orderId: null },
+              });
+            }
+          } catch (e) { /* ignore */ }
+          details.push({ orderId: order._id, action: 'auto_cancelled_expired', detail: '预约时段过期，自动取消退款' });
+          processed++;
+        }
+      } catch (e) {
+        details.push({ orderId: order._id, action: 'error', error: e.message });
+      }
+    }
+
+    // ========================================
+    // 2. 查询所有"进行中"的订单
+    // ========================================
     const usingOrders = await db.collection('orders')
       .where({ status: 'using' })
       .get();
 
-    if (!usingOrders.data || usingOrders.data.length === 0) {
-      console.log('无进行中订单');
-      return { code: 0, data: { processed: 0, details: [] }, msg: '无进行中订单' };
-    }
+    if (usingOrders.data && usingOrders.data.length > 0) {
+      console.log(`发现 ${usingOrders.data.length} 个进行中订单`);
 
-    console.log(`发现 ${usingOrders.data.length} 个进行中订单`);
-
-    // 2. 获取超时倍率
+    // 3. 获取超时倍率
     let overtimeRate = 1.5;
     try {
       const rateRes = await db.collection('settings').where({ key: 'overTimeRate' }).get();
@@ -37,8 +81,6 @@ exports.main = async (event, context) => {
         overtimeRate = rateRes.data[0].value;
       }
     } catch (e) { /* ignore */ }
-
-    const now = new Date();
 
     for (const order of usingOrders.data) {
       try {
@@ -143,6 +185,7 @@ exports.main = async (event, context) => {
         });
       }
     }
+    } // end if usingOrders.data.length > 0
 
     console.log(`checkTimeout 完成: 处理 ${processed} 个订单`);
     return { code: 0, data: { processed, details }, msg: 'ok' };
