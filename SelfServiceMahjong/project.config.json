@@ -51,7 +51,7 @@
   "compileType": "miniprogram",
   "miniprogramRoot": "miniprogram/",
   "libVersion": "3.6.0",
-  "appid": "wxb7da1a1e4cac4dc2",
+  "appid": "请填入你的小程序AppID",
   "projectname": "SelfServiceMahjong",
   "cloudfunctionRoot": "cloudfunctions/",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",

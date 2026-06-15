@@ -6,17 +6,29 @@ Page({
   data: {
     storeId: '', store: null, tables: [], defaultSlots: [],
     reviewSummary: { avgRating: 0, totalReviews: 0 },
-    dates: [], selectedDate: '', selectedDateText: '',
+    dates: getNextDays(7), selectedDate: getTodayStr(), selectedDateText: formatDateChinese(getTodayStr()),
     selectedTableId: '', selectedSlot: '',
     loading: true, errorMsg: '',
   },
 
   onLoad(options) {
-    const { storeId } = options;
-    if (!storeId) { wx.navigateBack(); return; }
-    const dates = getNextDays(7);
-    const today = getTodayStr();
-    this.setData({ storeId, dates, selectedDate: today, selectedDateText: formatDateChinese(today) });
+    // 防重复：用 JS 属性而非 setData（同步生效）
+    if (this.__loaded) return;
+    this.__loaded = true;
+
+    const storeId = options.storeId;
+    console.log('store接收storeId:', storeId);
+    if (!storeId || storeId === 'undefined' || storeId === 'null') {
+      wx.showToast({ title: '门店参数无效', icon: 'error' });
+      const pages = getCurrentPages();
+      if (pages.length > 1) {
+        setTimeout(() => wx.navigateBack(), 1000);
+      } else {
+        setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1000);
+      }
+      return;
+    }
+    this.setData({ storeId, selectedDate: getTodayStr(), selectedDateText: formatDateChinese(getTodayStr()) });
     this.loadDetail();
   },
 

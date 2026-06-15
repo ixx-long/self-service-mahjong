@@ -14,8 +14,16 @@ Page({
   },
 
   onLoad(options) {
-    const { orderId, storeId } = options;
-    if (!orderId) { wx.navigateBack(); return; }
+    if (this.__loaded) return;
+    this.__loaded = true;
+    const orderId = options.orderId, storeId = options.storeId;
+    if (!orderId || orderId === 'undefined') {
+      wx.showToast({ title: '订单参数无效', icon: 'error' });
+      const pages = getCurrentPages();
+      if (pages.length > 1) wx.navigateBack();
+      else wx.switchTab({ url: '/pages/index/index' });
+      return;
+    }
     this.setData({ orderId, storeId });
   },
 

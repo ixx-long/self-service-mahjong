@@ -33,17 +33,13 @@
     </view>
 
     <!-- 日期选择器 -->
-    <scroll-view class="date-bar" scroll-x show-scrollbar="{{false}}">
-      <view
-        wx:for="{{dates}}"
-        wx:key="*this"
-        class="date-item {{selectedDate === item ? 'active' : ''}}"
-        data-date="{{item}}"
-        bindtap="onDateChange"
-      >
-        <text class="date-week">{{item.slice(5)}}</text>
-      </view>
-    </scroll-view>
+    <view class="date-bar">
+      <block wx:for="{{dates}}" wx:key="*this">
+        <view class="date-item {{selectedDate === item ? 'active' : ''}}" data-date="{{item}}" bindtap="onDateChange">
+          <text>{{item.slice(5)}}</text>
+        </view>
+      </block>
+    </view>
 
     <!-- 桌位列表（使用组件） -->
     <view class="table-list">

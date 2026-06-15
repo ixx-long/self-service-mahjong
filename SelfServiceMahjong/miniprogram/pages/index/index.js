@@ -29,9 +29,15 @@ Page({
       const pos = await app.getLocation();
       const res = await callFunction('getNearbyStores', { latitude: pos.latitude, longitude: pos.longitude });
       if (res.code === 0) {
-        const stores = (res.data.stores || []).map(s => ({
-          ...s, distanceText: formatDistance(s.distance),
-        }));
+        const stores = (res.data.stores || []).map(s => {
+          // 客户端重新算距离（云函数可能返回 0）
+          let dist = s.distance;
+          if (!dist && s.location && s.location.coordinates) {
+            dist = haversine(pos.latitude, pos.longitude, s.location.coordinates[1], s.location.coordinates[0]);
+          }
+          return { ...s, distance: dist, distanceText: formatDistance(dist) };
+        });
+        stores.sort((a, b) => a.distance - b.distance);
         this.setData({ stores, loading: false, refreshing: false, hasLocation: true });
       } else if (res.code === -2) {
         this.setData({ loading: false, refreshing: false, errorMsg: res.msg });
@@ -44,11 +50,24 @@ Page({
     }
   },
 
-  /** 组件事件：点击门店卡片 */
+  /** 组件事件：点击门店卡片（防抖 500ms） */
   onStoreTap(e) {
-    const { storeId } = e.detail;
+    const now = Date.now();
+    if (this._lastTap && now - this._lastTap < 500) return;
+    this._lastTap = now;
+    const storeId = e.detail.storeId;
     wx.navigateTo({ url: `/pages/store/store?storeId=${storeId}` });
   },
 
   onRetryLocation() { this.loadStores(); },
 });
+
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+    + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
+    * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}

@@ -44,10 +44,10 @@
 }
 
 .date-item {
-  display: inline-flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   min-width: 120rpx; height: 60rpx; padding: 0 20rpx; margin-right: 12rpx;
   border-radius: 30rpx; background: #F5F0E8;
-  font-size: 26rpx; color: #8D7B6F; transition: all 0.25s ease;
+  font-size: 26rpx; color: #8D7B6F; flex-shrink: 0;
 }
 
 .date-item.active {

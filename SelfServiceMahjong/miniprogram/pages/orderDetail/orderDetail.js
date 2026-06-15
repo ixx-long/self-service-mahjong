@@ -33,10 +33,17 @@ Page({
   },
 
   onLoad(options) {
-    const { orderId } = options;
-    if (!orderId) {
-      wx.showToast({ title: '缺少订单参数', icon: 'error' });
-      wx.navigateBack();
+    if (this.__loaded) return;
+    this.__loaded = true;
+    const orderId = options.orderId;
+    if (!orderId || orderId === 'undefined' || orderId === 'null') {
+      wx.showToast({ title: '订单参数无效', icon: 'error' });
+      const pages = getCurrentPages();
+      if (pages.length > 1) {
+        wx.navigateBack();
+      } else {
+        wx.switchTab({ url: '/pages/index/index' });
+      }
       return;
     }
     this.setData({ orderId });

@@ -24,11 +24,15 @@ Page({
   },
 
   onLoad(options) {
-    const { storeId, tableId, date, slot } = options;
+    if (this.__loaded) return;
+    this.__loaded = true;
+    const storeId = options.storeId, tableId = options.tableId, date = options.date, slot = options.slot;
 
-    if (!storeId || !tableId || !date || !slot) {
+    if (!storeId || storeId === 'undefined' || !tableId || tableId === 'undefined' || !date || !slot) {
       wx.showToast({ title: '参数不完整', icon: 'error' });
-      wx.navigateBack();
+      const pages = getCurrentPages();
+      if (pages.length > 1) wx.navigateBack();
+      else wx.switchTab({ url: '/pages/index/index' });
       return;
     }
 
@@ -36,11 +40,7 @@ Page({
     const slotHours = this.calcHours(slot);
 
     this.setData({
-      storeId,
-      tableId,
-      date,
-      slot,
-      slotHours,
+      storeId, tableId, date, slot, slotHours,
       dateText: formatDateChinese(date),
     });
 

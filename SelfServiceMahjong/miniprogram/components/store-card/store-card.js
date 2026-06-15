@@ -20,7 +20,9 @@ Component({
 
   methods: {
     onTap() {
-      this.triggerEvent('tap', { storeId: this.properties.store._id });
+      const storeId = this.properties.store._id;
+      console.log('store-card点击, storeId:', storeId);
+      this.triggerEvent('tap', { storeId });
     },
   },
 });

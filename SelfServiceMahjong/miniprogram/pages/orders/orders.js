@@ -100,7 +100,11 @@ Page({
 
   /** 点击订单 → 详情页 */
   onOrderTap(e) {
-    const { id } = e.currentTarget.dataset;
+    const id = e.currentTarget.dataset.id;
+    if (!id) {
+      wx.showToast({ title: '订单数据异常', icon: 'error' });
+      return;
+    }
     wx.navigateTo({ url: `/pages/orderDetail/orderDetail?orderId=${id}` });
   },
 

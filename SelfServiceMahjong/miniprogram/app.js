@@ -10,7 +10,7 @@ App({
       return;
     }
     wx.cloud.init({
-      env: 'cloud1-d5g0m6pp3fa62c8d0',
+      env: '请填入你的云环境ID',
       traceUser: true,
     });
 
