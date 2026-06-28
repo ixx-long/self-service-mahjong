@@ -1,0 +1,49 @@
+<!--客服管理（管理端）-->
+<view class="page">
+  <view class="admin-bar">
+    <text class="admin-bar-icon">💬</text>
+    <text class="admin-bar-title">客服管理</text>
+  </view>
+  <!-- 会话列表 -->
+  <view wx:if="{{!activeOpenId}}">
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="skeleton" style="height:80rpx;width:92%;margin:12rpx auto;" wx:for="{{[1,2,3]}}" wx:key="*this"></view>
+    </view>
+    <block wx:else>
+      <view wx:if="{{sessions.length === 0}}" class="empty-state"><text>暂无客服消息</text></view>
+      <view wx:for="{{sessions}}" wx:key="openId" class="card session-item" data-openid="{{item.openId}}" bindtap="onOpenChat">
+        <view class="flex-between">
+          <text class="text-bold">用户 {{item.openId.slice(-8)}}</text>
+          <text class="text-sm text-lighter">{{item.lastTime ? item.lastTime : ''}}</text>
+        </view>
+        <text class="text-sm text-light mt-sm text-ellipsis" style="display:block;">{{item.lastContent}}</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 聊天界面 -->
+  <view wx:else>
+    <view class="chat-header flex-between bg-white px-base py-base">
+      <text bindtap="onBackToSessions" class="text-primary">← 返回列表</text>
+      <text class="text-bold">用户 {{activeOpenId.slice(-8)}}</text>
+      <text></text>
+    </view>
+
+    <scroll-view class="chat-area" scroll-y scroll-into-view="{{scrollToView}}" scroll-with-animation>
+      <view wx:for="{{messages}}" wx:key="_id" id="msg-{{index}}" class="msg-wrapper {{item.from === 'admin' ? 'msg-right' : 'msg-left'}}">
+        <view wx:if="{{item.from === 'user'}}" class="msg-avatar text-sm text-primary">用户</view>
+        <view class="msg-bubble {{item.from === 'admin' ? 'bubble-right' : 'bubble-left'}}">
+          <text wx:if="{{item.type === 'text'}}" class="msg-text">{{item.content}}</text>
+          <image wx:elif="{{item.type === 'image'}}" src="{{item.content}}" mode="widthFix" class="msg-image"></image>
+          <text class="msg-time text-sm text-lighter">{{item.timeText}}</text>
+        </view>
+        <view wx:if="{{item.from === 'admin'}}" class="msg-avatar text-sm text-primary">客服</view>
+      </view>
+    </scroll-view>
+
+    <view class="input-bar safe-bottom flex">
+      <input class="chat-input flex-1" value="{{inputText}}" placeholder="回复消息..." bindinput="onInput" confirm-type="send" bindconfirm="onSend"/>
+      <button class="btn btn-sm btn-primary" style="margin:0;height:64rpx;" bindtap="onSend" loading="{{sending}}" disabled="{{inputText===''||sending}}">发送</button>
+    </view>
+  </view>
+</view>

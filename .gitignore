@@ -1,0 +1,26 @@
+# 敏感配置文件
+project.config.json
+project.private.config.json
+*.env
+.env.*
+
+# 依赖和构建
+node_modules/
+miniprogram/node_modules/
+cloudfunctions/*/node_modules/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE 配置
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 临时文件
+*.tmp
+*.bak
+dist/

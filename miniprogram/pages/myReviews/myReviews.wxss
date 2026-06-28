@@ -1,0 +1,24 @@
+/* 我的评价 */
+.page { min-height: 100vh; background: var(--color-bg); }
+.list { padding: 20rpx 24rpx; }
+.review-card {
+  background: #fff; border-radius: 16rpx; padding: 28rpx;
+  margin-bottom: 16rpx; box-shadow: var(--shadow-card);
+}
+.review-header { margin-bottom: 12rpx; }
+.review-content { font-size: 28rpx; color: #555; line-height: 1.6; display: block; margin-bottom: 12rpx; }
+.review-images { display: flex; flex-wrap: wrap; gap: 12rpx; margin-bottom: 12rpx; }
+.review-img { width: 160rpx; height: 160rpx; border-radius: 8rpx; }
+.review-time { font-size: 24rpx; color: #999; }
+.empty-state { padding-top: 200rpx; text-align: center; }
+.empty-icon-text { font-size: 80rpx; display: block; margin-bottom: 16rpx; }
+.empty-text { font-size: 30rpx; color: #999; }
+.loading-container { padding-top: 40rpx; }
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 16rpx;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

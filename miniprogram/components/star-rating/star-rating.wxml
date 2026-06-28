@@ -1,0 +1,14 @@
+<!--星级评分组件-->
+<view class="star-rating flex">
+  <view
+    wx:for="{{stars}}"
+    wx:key="index"
+    class="star-item"
+    data-value="{{index + 1}}"
+    bindtap="onTap"
+  >
+    <text wx:if="{{item === 'full'}}" class="star star-full" style="font-size:{{size}}rpx;">★</text>
+    <text wx:elif="{{item === 'half'}}" class="star star-half" style="font-size:{{size}}rpx;">★</text>
+    <text wx:else class="star star-empty" style="font-size:{{size}}rpx;">★</text>
+  </view>
+</view>

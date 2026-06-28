@@ -1,0 +1,9 @@
+{
+  "name": "finishOrder",
+  "version": "1.0.0",
+  "description": "结束使用，计算实际费用，多退少补，释放桌位",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

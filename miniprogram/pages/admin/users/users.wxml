@@ -1,0 +1,36 @@
+<!--用户管理-->
+<view class="page">
+  <view class="admin-bar">
+    <text class="admin-bar-icon">👥</text>
+    <text class="admin-bar-title">用户管理</text>
+  </view>
+  <view class="search-bar bg-white px-base py-base flex">
+    <input class="search-input flex-1" value="{{keyword}}" placeholder="搜索昵称/手机号" bindinput="onSearchInput" confirm-type="search" bindconfirm="onSearch"/>
+    <button class="btn btn-sm btn-primary" style="margin-left:16rpx;" bindtap="onSearch">搜索</button>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="skeleton" style="height:120rpx;width:92%;margin:12rpx auto;" wx:for="{{[1,2,3]}}" wx:key="*this"></view>
+  </view>
+
+  <block wx:else>
+    <view class="list px-base pt-base">
+      <view wx:for="{{users}}" wx:key="_id" class="card list-card flex-between">
+        <view>
+          <text class="text-bold">{{item.nickName || '未设置昵称'}}</text>
+          <text class="text-sm text-light ml-sm">{{item.phoneMasked || '未绑定手机'}}</text>
+          <view class="flex mt-sm" style="gap:12rpx;">
+            <text class="text-sm text-lighter">余额 ¥{{item.balance}}</text>
+            <text wx:if="{{item.role==='admin'}}" class="text-sm text-primary">管理员</text>
+            <text wx:if="{{item.isBlocked}}" class="text-sm text-danger">已拉黑</text>
+          </view>
+        </view>
+        <button class="btn btn-sm {{item.isBlocked ? 'btn-outline' : 'btn-danger'}}" size="mini" data-id="{{item._id}}" data-blocked="{{item.isBlocked}}" bindtap="onToggleBlock">
+          {{item.isBlocked ? '解封' : '拉黑'}}
+        </button>
+      </view>
+      <view wx:if="{{users.length===0}}" class="empty-state"><text>无匹配用户</text></view>
+      <view wx:if="{{hasMore}}" class="load-more text-center py-base" bindtap="loadMore"><text class="text-sm text-lighter">加载更多</text></view>
+    </view>
+  </block>
+</view>

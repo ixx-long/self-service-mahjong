@@ -1,0 +1,9 @@
+{
+  "name": "cancelOrder",
+  "version": "1.0.0",
+  "description": "取消订单（待支付直接取消，已支付退款到余额）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

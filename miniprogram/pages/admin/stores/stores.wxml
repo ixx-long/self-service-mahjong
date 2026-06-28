@@ -1,0 +1,54 @@
+<!--门店管理-->
+<view class="page" wx:if="{{!showForm}}">
+  <view class="admin-bar">
+    <text class="admin-bar-icon">🏠</text>
+    <text class="admin-bar-title">门店管理</text>
+  </view>
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="skeleton" style="height:120rpx;width:92%;margin:16rpx auto;" wx:for="{{[1,2,3]}}" wx:key="*this"></view>
+  </view>
+
+  <block wx:else>
+    <view class="list" style="padding:0 20rpx;">
+      <view wx:for="{{stores}}" wx:key="_id" class="list-card flex-between">
+        <view class="flex-1">
+          <text class="text-bold">{{item.name}}</text>
+          <text class="text-sm text-light" style="display:block;margin-top:8rpx;">{{item.address}}</text>
+          <text class="text-sm text-lighter">{{item.openTime}}-{{item.closeTime}}</text>
+        </view>
+        <view class="flex" style="gap:16rpx;">
+          <button class="btn btn-sm btn-outline" size="mini" data-id="{{item._id}}" bindtap="onEdit">编辑</button>
+          <button class="btn btn-sm btn-danger" size="mini" data-id="{{item._id}}" bindtap="onDelete">关闭</button>
+        </view>
+      </view>
+      <view wx:if="{{stores.length===0}}" class="empty-state"><text>暂无门店</text></view>
+    </view>
+
+    <view class="fab" bindtap="onAdd">＋ 新增门店</view>
+  </block>
+</view>
+
+<!-- ===== 编辑弹窗（根层级） ===== -->
+<view wx:if="{{showForm}}" class="modal-root">
+  <view class="modal-mask" bindtap="onCloseForm"></view>
+  <view class="modal-box" catchtap="">
+    <text class="modal-title">{{editingStore ? '编辑门店' : '新增门店'}}</text>
+    <view class="form-item"><text class="form-label">名称</text><input class="form-input" value="{{form.name}}" data-field="name" bindinput="onFormInput" placeholder="门店名称" adjust-position="{{true}}"/></view>
+    <view class="form-item"><text class="form-label">地址</text><input class="form-input" value="{{form.address}}" data-field="address" bindinput="onFormInput" placeholder="详细地址" adjust-position="{{true}}"/></view>
+    <view class="form-item"><text class="form-label">电话</text><input class="form-input" type="number" value="{{form.phone}}" data-field="phone" bindinput="onFormInput" placeholder="联系电话" adjust-position="{{true}}"/></view>
+    <view class="form-item">
+      <text class="form-label">门店位置（地图选点）</text>
+      <button class="btn btn-outline" style="width:100%;" bindtap="onChooseLocation">
+        📍 {{locationDisplay}}
+      </button>
+    </view>
+    <view class="flex" style="gap:16rpx;">
+      <view class="form-item flex-1"><text class="form-label">营业开始</text><input class="form-input" value="{{form.openTime}}" data-field="openTime" bindinput="onFormInput" adjust-position="{{true}}"/></view>
+      <view class="form-item flex-1"><text class="form-label">营业结束</text><input class="form-input" value="{{form.closeTime}}" data-field="closeTime" bindinput="onFormInput" adjust-position="{{true}}"/></view>
+    </view>
+    <view class="modal-btns">
+      <button class="btn btn-outline" style="flex:1;" bindtap="onCloseForm">取消</button>
+      <button class="btn btn-primary" style="flex:2;margin:0;" bindtap="onSave">保存</button>
+    </view>
+  </view>
+</view>

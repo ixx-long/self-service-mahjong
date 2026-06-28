@@ -1,0 +1,9 @@
+{
+  "name": "getNearbyStores",
+  "version": "1.0.0",
+  "description": "根据坐标返回附近门店列表（按距离排序）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

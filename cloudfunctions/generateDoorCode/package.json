@@ -1,0 +1,10 @@
+{
+  "name": "generateDoorCode",
+  "version": "1.0.0",
+  "description": "生成开门码二维码图片（base64）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "qrcode": "^1.5.3"
+  }
+}

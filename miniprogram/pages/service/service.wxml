@@ -1,0 +1,55 @@
+<!--在线客服（用户端）-->
+<view class="page">
+  <scroll-view class="chat-area" scroll-y scroll-into-view="{{scrollToView}}" scroll-with-animation>
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="skeleton" style="height:80rpx;width:60%;margin:16rpx auto;" wx:for="{{[1,2,3]}}" wx:key="*this"></view>
+    </view>
+
+    <block wx:else>
+      <view wx:if="{{messages.length === 0}}" class="empty-state">
+        <text class="empty-text">暂无消息，输入内容联系客服</text>
+      </view>
+
+      <view
+        wx:for="{{messages}}"
+        wx:key="_id"
+        id="msg-{{item._id || index}}"
+        class="msg-wrapper {{item.from === 'user' ? 'msg-right' : 'msg-left'}}"
+      >
+        <!-- 客服头像/标识 -->
+        <view wx:if="{{item.from === 'admin'}}" class="msg-avatar text-sm text-primary">客服</view>
+        <view class="msg-bubble {{item.from === 'user' ? 'bubble-right' : 'bubble-left'}}">
+          <!-- 文字消息 -->
+          <text wx:if="{{item.type === 'text'}}" class="msg-text">{{item.content}}</text>
+          <!-- 图片消息 -->
+          <image wx:elif="{{item.type === 'image'}}" src="{{item.content}}" mode="widthFix" class="msg-image"></image>
+          <text class="msg-time text-sm text-lighter">{{item.timeText}}</text>
+        </view>
+        <!-- 用户头像 -->
+        <view wx:if="{{item.from === 'user'}}" class="msg-avatar text-sm text-light">我</view>
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 输入栏 -->
+  <view class="input-bar safe-bottom flex">
+    <view class="btn-icon" bindtap="onSendImage">📷</view>
+    <input
+      class="chat-input flex-1"
+      value="{{inputText}}"
+      placeholder="输入消息..."
+      bindinput="onInput"
+      confirm-type="send"
+      bindconfirm="onSend"
+    />
+    <button
+      class="btn btn-sm btn-primary"
+      style="margin:0;height:64rpx;"
+      bindtap="onSend"
+      loading="{{sending}}"
+      disabled="{{inputText === '' || sending}}"
+    >
+      发送
+    </button>
+  </view>
+</view>

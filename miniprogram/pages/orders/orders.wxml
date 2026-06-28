@@ -1,0 +1,69 @@
+<!--我的订单列表-->
+<view class="page">
+  <!-- Tab 切换栏 -->
+  <scroll-view class="tab-bar" scroll-x show-scrollbar="{{false}}">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+      data-tab="{{item.key}}"
+      bindtap="onTabChange"
+    >
+      {{item.label}}
+    </view>
+  </scroll-view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="skeleton" style="height:180rpx;width:92%;margin:20rpx auto;"></view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{orders.length === 0}}" class="empty-state">
+    <text class="empty-icon-text">📋</text>
+    <text class="empty-text">暂无{{activeTabLabel}}订单</text>
+  </view>
+
+  <!-- 订单列表 -->
+  <view wx:else class="order-list">
+    <view
+      wx:for="{{orders}}"
+      wx:key="_id"
+      class="card order-card"
+      data-id="{{item._id}}"
+      bindtap="onOrderTap"
+    >
+      <!-- 头部：门店 + 日期 + 状态标签 -->
+      <view class="flex-between mb-sm">
+        <text class="text-bold text-ellipsis" style="max-width:60%">桌号: {{item.timeSlot}}</text>
+        <view class="status-tag {{item.status}}">{{item.statusText}}</view>
+      </view>
+
+      <!-- 日期 + 时段 -->
+      <view class="flex-between mb-sm">
+        <text class="text-sm text-light">{{item.dateText}}</text>
+        <text class="text-sm text-primary">{{item.timeSlot}}</text>
+      </view>
+
+      <!-- 金额 -->
+      <view class="flex-between">
+        <text class="text-sm text-light">金额</text>
+        <text class="text-bold text-accent">{{item.amountText}}</text>
+      </view>
+
+      <!-- 快捷操作按钮 -->
+      <view class="flex mt-sm" style="justify-content:flex-end;gap:16rpx;" wx:if="{{item.status === 'pending' || item.status === 'paid'}}">
+        <!-- 待支付：去支付 + 取消 -->
+        <block wx:if="{{item.status === 'pending'}}">
+          <button class="btn btn-sm btn-outline" size="mini" catchtap="onQuickCancel" data-id="{{item._id}}">取消</button>
+          <button class="btn btn-sm btn-primary" size="mini" catchtap="onQuickPay" data-id="{{item._id}}">去支付</button>
+        </block>
+        <!-- 已支付：查看开门码 -->
+        <block wx:elif="{{item.status === 'paid'}}">
+          <button class="btn btn-sm btn-outline" size="mini" catchtap="onQuickCancel" data-id="{{item._id}}">取消退款</button>
+          <button class="btn btn-sm btn-primary" size="mini" catchtap="onOrderTap" data-id="{{item._id}}">查看开门码</button>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>

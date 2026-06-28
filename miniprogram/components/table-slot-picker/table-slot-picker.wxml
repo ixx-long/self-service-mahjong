@@ -1,0 +1,39 @@
+<!--桌位时段选择器-->
+<view class="table-card card">
+  <!-- 桌位头部 -->
+  <view class="table-header">
+    <view class="table-info">
+      <text class="table-no text-bold">{{table.tableNo}}号桌</text>
+      <text class="table-type">{{table.type === 'auto' ? '自动麻将桌' : '普通桌'}}</text>
+    </view>
+    <view class="table-meta">
+      <view class="status-dot {{table.status}}"></view>
+      <text class="price-text">¥{{table.hourlyPrice}}<text class="price-unit">/时</text></text>
+    </view>
+  </view>
+
+  <!-- 维修中提示 -->
+  <view wx:if="{{table.status === 'maintenance'}}" class="maintenance-notice">
+    <text>🔧 该桌位正在维修中，暂不可预约</text>
+  </view>
+
+  <!-- 时段网格 -->
+  <view wx:else class="slot-grid">
+    <view
+      wx:for="{{table.timeSlots}}"
+      wx:for-item="slot"
+      wx:key="slot"
+      class="slot-item {{slot.status}} {{selectedTableId === table._id && selectedSlot === slot.slot ? 'selected' : ''}}"
+      data-slot="{{slot.slot}}"
+      data-status="{{slot.status}}"
+      bindtap="onSlotTap"
+    >
+      <text class="slot-time">{{slot.slot}}</text>
+      <view class="slot-indicator">
+        <view wx:if="{{slot.status === 'free'}}" class="indicator-dot free"></view>
+        <view wx:elif="{{slot.status === 'booked'}}" class="indicator-dot booked"></view>
+        <view wx:elif="{{slot.status === 'occupied'}}" class="indicator-dot occupied"></view>
+      </view>
+    </view>
+  </view>
+</view>

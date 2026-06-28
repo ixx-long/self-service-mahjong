@@ -1,0 +1,9 @@
+{
+  "name": "sendSubscribeMessage",
+  "version": "1.0.0",
+  "description": "发送微信订阅消息通知（支付成功/开台/超时预警/完成）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

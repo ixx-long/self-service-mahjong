@@ -1,0 +1,188 @@
+/* 订单详情页样式 */
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 140rpx;
+}
+
+/* 状态横幅 */
+.status-banner {
+  padding: var(--spacing-xl) var(--spacing-lg);
+  text-align: center;
+  color: var(--color-white);
+}
+
+.status-banner.pending { background-color: var(--color-warning); }
+.status-banner.paid { background-color: #2196F3; }
+.status-banner.using { background-color: var(--color-danger); }
+.status-banner.completed { background-color: var(--color-success); }
+.status-banner.cancelled { background-color: var(--color-disabled); }
+
+.status-title {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+/* 信息卡片 */
+.info-card {
+  padding: var(--spacing-lg);
+}
+
+.info-row {
+  padding: var(--spacing-sm) 0;
+}
+
+/* 计时卡片 */
+.timer-card {
+  padding: var(--spacing-xl);
+  text-align: center;
+  background: linear-gradient(135deg, #FFF5F5, #FFF);
+}
+
+/* 开门码卡片 */
+.door-code-card {
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 开门码大号展示 */
+.code-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.qr-image {
+  width: 360rpx;
+  height: 360rpx;
+  border: 4rpx solid #E5E5E5;
+  border-radius: 16rpx;
+  background: #FFFFFF;
+}
+.code-num {
+  font-size: 24rpx;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  color: #666;
+  background: #F5F5F5;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  text-align: center;
+  word-break: break-all;
+  letter-spacing: 2rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.code-hint {
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+}
+
+.expire-timer {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: rgba(255, 152, 0, 0.1);
+  border-radius: 20rpx;
+}
+
+/* 时间轴 */
+.timeline-card {
+  padding: var(--spacing-lg);
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  padding-left: var(--spacing-sm);
+  padding-bottom: var(--spacing-lg);
+  position: relative;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 12rpx;
+  top: 24rpx;
+  bottom: 0;
+  width: 2rpx;
+  background-color: var(--color-border);
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-dot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background-color: var(--color-border);
+  margin-right: var(--spacing-base);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-dot.done {
+  background-color: var(--color-primary);
+}
+
+.timeline-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-content .text-sm:last-child {
+  margin-top: 4rpx;
+}
+
+/* 操作按钮区 */
+.action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-base);
+  background-color: var(--color-white);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+/* 结算弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  width: 600rpx;
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.settle-detail {
+  background-color: var(--color-bg);
+  border-radius: var(--radius-base);
+  padding: var(--spacing-base);
+}

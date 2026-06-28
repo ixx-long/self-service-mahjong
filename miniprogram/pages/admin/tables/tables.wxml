@@ -1,0 +1,61 @@
+<!--桌位管理-->
+<view class="page" wx:if="{{!showForm}}">
+  <view class="admin-bar">
+    <text class="admin-bar-icon">🀄</text>
+    <text class="admin-bar-title">桌位管理</text>
+  </view>
+  <view class="picker-bar">
+    <picker mode="selector" range="{{stores}}" range-key="name" bindchange="onStoreChange">
+      <view class="picker-display">{{selectedStoreName}}</view>
+    </picker>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="skeleton" style="height:100rpx;width:92%;margin:12rpx auto;" wx:for="{{[1,2,3]}}" wx:key="*this"></view>
+  </view>
+
+  <block wx:else>
+    <view class="list" style="padding:0 20rpx;">
+      <view wx:for="{{tables}}" wx:key="_id" class="list-card flex-between">
+        <view>
+          <text class="text-bold">{{item.tableNo}}号桌</text>
+          <text class="text-sm text-light" style="margin-left:12rpx;">{{item.type==='auto'?'自动':'普通'}}</text>
+          <text class="text-sm text-light" style="margin-left:12rpx;">¥{{item.hourlyPrice}}/时</text>
+        </view>
+        <view class="flex" style="align-items:center;gap:12rpx;">
+          <view class="status-dot {{item.status}}"></view>
+          <button class="btn btn-sm btn-outline" size="mini" data-id="{{item._id}}" bindtap="onEdit">编辑</button>
+          <button class="btn btn-sm btn-danger" size="mini" data-id="{{item._id}}" bindtap="onDelete">删除</button>
+        </view>
+      </view>
+      <view wx:if="{{tables.length===0}}" class="empty-state"><text>该门店暂无桌位</text></view>
+    </view>
+    <view class="fab" bindtap="onAdd">＋ 新增桌位</view>
+  </block>
+</view>
+
+<!-- ===== 编辑弹窗（根层级） ===== -->
+<view wx:if="{{showForm}}" class="modal-root">
+  <view class="modal-mask" bindtap="onCloseForm"></view>
+  <view class="modal-box" catchtap="">
+    <text class="modal-title">{{editingTable?'编辑桌位':'新增桌位'}}</text>
+    <view class="form-item"><text class="form-label">桌号</text><input class="form-input" value="{{form.tableNo}}" data-field="tableNo" bindinput="onFormInput" adjust-position="{{true}}"/></view>
+    <view class="form-item">
+      <text class="form-label">类型</text>
+      <picker mode="selector" range="{{['auto','normal']}}" value="{{form.type==='auto'?0:1}}" bindchange="onTypeChange">
+        <view class="form-input">{{form.type==='auto'?'自动麻将桌':'普通桌'}}</view>
+      </picker>
+    </view>
+    <view class="form-item"><text class="form-label">每小时单价（分）</text><input class="form-input" type="number" value="{{form.hourlyPrice}}" data-field="hourlyPrice" bindinput="onFormInput" adjust-position="{{true}}"/></view>
+    <view wx:if="{{editingTable}}" class="form-item">
+      <text class="form-label">状态</text>
+      <picker mode="selector" range="{{['idle','maintenance']}}" value="{{form.status==='maintenance'?1:0}}" bindchange="onStatusChange">
+        <view class="form-input">{{form.status==='idle'?'正常':'维修中'}}</view>
+      </picker>
+    </view>
+    <view class="modal-btns">
+      <button class="btn btn-outline" style="flex:1;" bindtap="onCloseForm">取消</button>
+      <button class="btn btn-primary" style="flex:2;margin:0;" bindtap="onSave">保存</button>
+    </view>
+  </view>
+</view>

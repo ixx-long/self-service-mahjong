@@ -1,0 +1,75 @@
+<!--管理仪表盘-->
+<view class="page">
+  <view class="admin-bar">
+    <text class="admin-bar-icon">⚙</text>
+    <text class="admin-bar-title">管理后台</text>
+  </view>
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="skeleton" style="height:200rpx;width:92%;margin:20rpx auto;" wx:for="{{[1,2,3]}}" wx:key="*this"></view>
+  </view>
+
+  <block wx:else>
+    <!-- 时段切换 -->
+    <view class="period-bar flex bg-white">
+      <view class="period-item {{period==='today'?'active':''}}" data-period="today" bindtap="onPeriodChange">今日</view>
+      <view class="period-item {{period==='week'?'active':''}}" data-period="week" bindtap="onPeriodChange">近7天</view>
+      <view class="period-item {{period==='month'?'active':''}}" data-period="month" bindtap="onPeriodChange">近30天</view>
+    </view>
+
+    <!-- 统计卡片 -->
+    <view class="stats-grid mt-base px-base">
+      <view class="stat-card">
+        <text class="stat-label text-sm text-light">营收</text>
+        <text class="stat-value text-accent text-bold">¥{{stats.totalRevenue}}</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-label text-sm text-light">订单数</text>
+        <text class="stat-value text-bold">{{stats.totalOrders}}</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-label text-sm text-light">活跃订单</text>
+        <text class="stat-value text-warning text-bold">{{stats.activeOrders}}</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-label text-sm text-light">使用率</text>
+        <text class="stat-value text-success text-bold">{{stats.utilizationRate}}%</text>
+      </view>
+    </view>
+
+    <!-- 桌位状态 -->
+    <view class="card mt-base">
+      <text class="text-bold mb-sm" style="display:block;">桌位状态</text>
+      <view class="flex-between">
+        <text class="text-light">使用中 / 总计</text>
+        <text class="text-bold">{{stats.inUseTables}} / {{stats.totalTables}} 桌</text>
+      </view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="quick-actions mt-base px-base">
+      <text class="text-bold mb-sm" style="display:block;">快捷入口</text>
+      <view class="action-grid">
+        <view class="action-item" data-page="orders" bindtap="goTo">
+          <text class="action-icon">📋</text>
+          <text class="text-sm">订单管理</text>
+        </view>
+        <view class="action-item" data-page="stores" bindtap="goTo">
+          <text class="action-icon">🏠</text>
+          <text class="text-sm">门店管理</text>
+        </view>
+        <view class="action-item" data-page="tables" bindtap="goTo">
+          <text class="action-icon">🀄</text>
+          <text class="text-sm">桌位管理</text>
+        </view>
+        <view class="action-item" data-page="users" bindtap="goTo">
+          <text class="action-icon">👥</text>
+          <text class="text-sm">用户管理</text>
+        </view>
+        <view class="action-item" data-page="settings" bindtap="goTo">
+          <text class="action-icon">⚙️</text>
+          <text class="text-sm">系统设置</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

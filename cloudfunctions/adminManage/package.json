@@ -1,0 +1,9 @@
+{
+  "name": "adminManage",
+  "version": "1.0.0",
+  "description": "管理端统一入口，通过 action 分发：门店/桌位/订单/用户/统计/设置管理",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
